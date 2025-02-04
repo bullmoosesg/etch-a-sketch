@@ -42,7 +42,7 @@
 .background{
     display: flex;
     justify-content: center;
-    align-items: start;
+    align-items: center;
     gap:24px;
 }
 
@@ -66,4 +66,32 @@
     font-weight:600;
     color: white;
     margin-bottom: 12px;
+}
+
+label,p{
+    text-align: right;
+    font-family: "Calibri", sans-serif;
+    font-size: 18pt;
+    font-weight:400;
+    color:#d12429;
+}
+
+#resetButton {
+    background-color:#94a894;
+    color:black;
+    font-family: 'Calibri' sans-serif;
+    text-align: center;
+    border: 2px #d12429;
+    border-radius: 8px;
+    border-style: solid;
+    height: 42px;
+    font-size: 16pt;
+}
+
+input{
+    color: #d12429;
+}
+
+input:checked {
+    color: black;
 }

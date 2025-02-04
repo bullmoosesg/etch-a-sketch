@@ -1,15 +1,17 @@
-const resButton = document.querySelector("#resize");
+const resizeButton = document.querySelector("#resize");
 const screen = document.querySelector('#screen');
-//const rowCount = 16;
 let square = document.createElement("div");
 square.setAttribute("class",'square');
+const resetButton = document.querySelector('#resetButton');
+//const modeRadio = document.querySelectorAll(input[name='mode']);
 
-/* create function to change resolution
-create function to load squares
-create function to color pixels
-create function to add event listeners */
+resetButton.addEventListener('click',()=>{
+    let allSquares = document.querySelectorAll('.square');
+    for (const s of allSquares){
+        s.style.opacity = 0;
+    }
 
-
+})
 
 function insertSquares(dim){
     //clear the screen
@@ -35,6 +37,8 @@ function insertSquares(dim){
         square.style.height = `${squareSize}px`;
     });
 
+    resetlisteners();
+
 };
 function darken(square){
     let opacity = square.style.opacity;
@@ -49,22 +53,23 @@ function darken(square){
 
 insertSquares(4);
 
-resButton.addEventListener("click",()=>{
+resizeButton.addEventListener("click",()=>{
     let size = prompt("How many squares?")
     //add code to validate its an integer and cap at 100
-    while (Number.isNaN(size) = false && size >= 100){
-        size = prompt("invalid, enter an integer between 1 and 100")
-    };
+    //while (Number.isNaN(size) = false && size >= 100){
+    //    size = prompt("invalid, enter an integer between 1 and 100")
+    //};
     insertSquares(size)
 });
-/* 
-This isnt working to progressively darken, does not re-read opacity
+
+
+//This isnt working to progressively darken, does not re-read opacity
 function readOpacity(square){
     let opacity = square.style.opacity;
     return opacity
 };
 
-function darken(square){
+function progdDarken(square){
     let opacity = readOpacity(square);
     
 
@@ -73,6 +78,47 @@ function darken(square){
         console.log(`triggered, opacity is now ${opacity}`);
     } else {
     console.log(`triggered, opacity is at max ${opacity}`);}
-} */
+} 
 
-//square.addEventListener("mouseover",()=>{darken(square)});
+function rgbDarken(){
+
+}
+
+function resetlisteners(){
+// this line sent chrome into 'Aw Snap Mode'
+ //   let mode = document.querySelector('input[name=mode]:checked').value;
+    let mode = "standard";
+    let squareSet = document.querySelectorAll(".square");
+/*     for (const b of modeRadio){
+        if (b.checked){
+            mode=b.value;
+            break;
+        }
+    }; */
+    
+    for (const s of squareSet){
+        s.addEventListener("mouseover",()=>{
+            switch(mode){
+                case "standard": 
+                    darken(s);
+                    break;
+                case "progressive":
+                    progdDarken(s);
+                    break;
+                case "rgb":
+                    rgbDarken(s);
+                    break;
+                }
+        }
+            )
+        }
+};
+
+  //this works, attempting to add switch
+/*function resetlisteners(){
+    let squareSet = document.querySelectorAll(".square");
+    
+  
+     for (const s of squareSet){
+        s.addEventListener("mouseover",()=>{darken(s)})
+    }}; */
