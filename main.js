@@ -13,7 +13,11 @@ resetButton.addEventListener('click',()=>{
 
 })
 
+
+//this needs to be fixed so the opacity resets at teh same time 
 function insertSquares(dim){
+    
+    square.style.opacity = 0;
     //clear the screen
     while (screen.firstChild){
         screen.removeChild(screen.firstChild);
@@ -21,7 +25,7 @@ function insertSquares(dim){
 
     let screenSize = 400 //make this dynamic later
     
-
+    
     screen.appendChild(square);
     
 
@@ -65,36 +69,56 @@ resizeButton.addEventListener("click",()=>{
 
 //This isnt working to progressively darken, does not re-read opacity
 function readOpacity(square){
-    let opacity = square.style.opacity;
-    return opacity
+    let opacityVal = square.style.opacity;
+    if (opacityVal == ""){
+        opacityVal === 0 
+    }
+    return +opacityVal
+
 };
 
-function progdDarken(square){
-    let opacity = readOpacity(square);
-    
+
+
+
+
+function progDarken(s){
+
+    let opacity = readOpacity(s);
 
     if (opacity < 1){
-        square.style.opacity += .1;
+        s.style.opacity = opacity + .1;
         console.log(`triggered, opacity is now ${opacity}`);
     } else {
     console.log(`triggered, opacity is at max ${opacity}`);}
 } 
 
 function rgbDarken(){
+    console.log("rgb_triggered")
 
 }
 
+
+  //this works, attempting to add switch below
+
 function resetlisteners(){
-// this line sent chrome into 'Aw Snap Mode'
+    let squareSet = document.querySelectorAll(".square");
+
+
+        for (const s of squareSet){
+        s.addEventListener("mouseover",()=>{progDarken(s)})
+}};
+
+/* function resetlisteners(){
+// this line sent chrome into 'Aw Snap Mode' 
  //   let mode = document.querySelector('input[name=mode]:checked').value;
     let mode = "standard";
     let squareSet = document.querySelectorAll(".square");
-/*     for (const b of modeRadio){
+    for (const b of modeRadio){
         if (b.checked){
             mode=b.value;
             break;
         }
-    }; */
+    }; 
     
     for (const s of squareSet){
         s.addEventListener("mouseover",()=>{
@@ -112,13 +136,5 @@ function resetlisteners(){
         }
             )
         }
-};
+}; */
 
-  //this works, attempting to add switch
-/*function resetlisteners(){
-    let squareSet = document.querySelectorAll(".square");
-    
-  
-     for (const s of squareSet){
-        s.addEventListener("mouseover",()=>{darken(s)})
-    }}; */
