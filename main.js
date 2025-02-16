@@ -31,10 +31,14 @@ for (const r of modeRadio){
 function insertSquares(dim){
     
     square.style.opacity = 0;
- 
+
+    square.removeEventListener("mouseover",()=>{darken(s)});
+
+
     while (screen.firstChild){
         screen.removeChild(screen.firstChild);
     }
+
 
     let screenSize = 400 //make this dynamic later
     
@@ -72,13 +76,6 @@ function clearScreen(){
     }
 }
 
-/* function removeListeners(){
-    let squareSet = document.querySelectorAll(".square");
-   // let fnParameter = squareSet(0).eventListener;
-    for (const s of squareSet){
-        s.removeEventListener('click',()=>{progDarken(s)});
-    } 
-} */
 
 resizeButton.addEventListener("click",()=>{
     let size = prompt("How many squares?")
@@ -98,7 +95,6 @@ function readOpacity(square){
     return +opacityVal
 
 };
-
 
 
 function darken(square){
@@ -155,6 +151,7 @@ function resetlisteners(mode){
         case 'rgb' :
             for (const s of squareSet){
                 s.addEventListener("mouseover",()=>{rgbDarken(s)})
+
             };
             break;
         case 'standard':
