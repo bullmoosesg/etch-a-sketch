@@ -3,28 +3,47 @@ const screen = document.querySelector('#screen');
 let square = document.createElement("div");
 square.setAttribute("class",'square');
 const resetButton = document.querySelector('#resetButton');
-//const modeRadio = document.querySelectorAll(input[name='mode']);
+const modeRadio = document.querySelectorAll('input');
+const rgbRadio = document.querySelector('#rgb');
+const stdRadio = document.querySelector('#standard');
+const progRadio = document.querySelector('#progressive')
+
+//fisrt square is keeping all 3 event listners. need to fix
 
 resetButton.addEventListener('click',()=>{
-    let allSquares = document.querySelectorAll('.square');
-    for (const s of allSquares){
-        s.style.opacity = 0;
+        clearScreen();
     }
+)
 
-})
 
+function modeSwitch(){
 
-//this needs to be fixed so the opacity resets at teh same time 
+    let squareList = document.querySelectorAll('.square');
+    let resolution = Math.sqrt(squareList.length)
+
+    insertSquares(resolution)   
+}
+
+for (const r of modeRadio){
+    r.addEventListener("click",modeSwitch)
+}
+        
 function insertSquares(dim){
     
     square.style.opacity = 0;
-    //clear the screen
+ 
     while (screen.firstChild){
         screen.removeChild(screen.firstChild);
     }
 
     let screenSize = 400 //make this dynamic later
     
+    let selectedMode 
+    for (const r of modeRadio){
+        if (r.checked == true){
+            selectedMode = r.id;
+            }
+    }
     
     screen.appendChild(square);
     
@@ -41,21 +60,25 @@ function insertSquares(dim){
         square.style.height = `${squareSize}px`;
     });
 
-    resetlisteners();
-
+    resetlisteners(selectedMode);
 };
-function darken(square){
-    let opacity = square.style.opacity;
-    
-
-    if (opacity < 1){
-        square.style.opacity += 1;
-        console.log(`triggered, opacity changed`);
-    } else {
-    console.log(`triggered, opacity is at max `);}
-} 
 
 insertSquares(4);
+
+function clearScreen(){
+    let allSquares = document.querySelectorAll('.square');
+    for (const s of allSquares){
+        s.style.opacity = 0;
+    }
+}
+
+/* function removeListeners(){
+    let squareSet = document.querySelectorAll(".square");
+   // let fnParameter = squareSet(0).eventListener;
+    for (const s of squareSet){
+        s.removeEventListener('click',()=>{progDarken(s)});
+    } 
+} */
 
 resizeButton.addEventListener("click",()=>{
     let size = prompt("How many squares?")
@@ -67,7 +90,6 @@ resizeButton.addEventListener("click",()=>{
 });
 
 
-//This isnt working to progressively darken, does not re-read opacity
 function readOpacity(square){
     let opacityVal = square.style.opacity;
     if (opacityVal == ""){
@@ -79,62 +101,65 @@ function readOpacity(square){
 
 
 
-
-
-function progDarken(s){
-
-    let opacity = readOpacity(s);
+function darken(square){
+    let opacity = square.style.opacity;
 
     if (opacity < 1){
-        s.style.opacity = opacity + .1;
-        console.log(`triggered, opacity is now ${opacity}`);
-    } else {
-    console.log(`triggered, opacity is at max ${opacity}`);}
-} 
-
-function rgbDarken(){
-    console.log("rgb_triggered")
-
+        square.style.opacity += 1;
+    } 
 }
 
 
-  //this works, attempting to add switch below
+function progDarken(square){
 
-function resetlisteners(){
-    let squareSet = document.querySelectorAll(".square");
+    let opacity = readOpacity(square);
+    if (opacity < 1){
+        square.style.opacity = opacity + .1;
+    } 
+} 
 
+function randColor(){
+    const colors = ["blue","red","green","purple", "yellow", "teal"];
+    let pick = Math.round(Math.random()*5);
+    let output = colors[pick];
+    return output;
+}
 
-        for (const s of squareSet){
-        s.addEventListener("mouseover",()=>{progDarken(s)})
-}};
+/* function randHue(){
+    let pick = Math.round(Math.random()*35)*10
+    return pick
+} */
 
-/* function resetlisteners(){
-// this line sent chrome into 'Aw Snap Mode' 
- //   let mode = document.querySelector('input[name=mode]:checked').value;
-    let mode = "standard";
-    let squareSet = document.querySelectorAll(".square");
-    for (const b of modeRadio){
-        if (b.checked){
-            mode=b.value;
-            break;
-        }
-    }; 
+function rgbDarken(square){
+    let opacity = square.style.opacity;
+    let color = randColor();
+    //let hue = randHue();
+    if (opacity < 1){
+        square.style.backgroundColor = color
+        //square.style.backgroundColor = `hsl(${hue},100,50)`
+        square.style.opacity += 1;
+    } 
+
     
-    for (const s of squareSet){
-        s.addEventListener("mouseover",()=>{
-            switch(mode){
-                case "standard": 
-                    darken(s);
-                    break;
-                case "progressive":
-                    progdDarken(s);
-                    break;
-                case "rgb":
-                    rgbDarken(s);
-                    break;
-                }
-        }
-            )
-        }
-}; */
+}
 
+function resetlisteners(mode){
+    let squareSet = document.querySelectorAll(".square");
+
+    switch(mode){
+        case 'progressive' :
+            for (const s of squareSet){
+                s.addEventListener("mouseover",()=>{progDarken(s)})
+                };
+            break;
+        case 'rgb' :
+            for (const s of squareSet){
+                s.addEventListener("mouseover",()=>{rgbDarken(s)})
+            };
+            break;
+        case 'standard':
+            for (const s of squareSet){
+                s.addEventListener("mouseover",()=>{darken(s)})
+            };
+            break;
+}}
