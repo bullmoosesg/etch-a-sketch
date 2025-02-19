@@ -1,7 +1,7 @@
 const resizeButton = document.querySelector("#resize");
 const screen = document.querySelector('#screen');
-let square = document.createElement("div");
-square.setAttribute("class",'square');
+// let square = document.createElement("div");
+// square.setAttribute("class",'square');
 const resetButton = document.querySelector('#resetButton');
 const modeRadio = document.querySelectorAll('input');
 const rgbRadio = document.querySelector('#rgb');
@@ -30,10 +30,10 @@ for (const r of modeRadio){
         
 function insertSquares(dim){
     
-    square.style.opacity = 0;
+/*     square.style.opacity = 0;
 
     square.removeEventListener("mouseover",()=>{darken(s)});
-
+ */
 
     while (screen.firstChild){
         screen.removeChild(screen.firstChild);
@@ -49,6 +49,12 @@ function insertSquares(dim){
             }
     }
     
+    let square = document.createElement("div");
+    
+    square.setAttribute("class",'square');
+
+    square.style.opacity = 0;
+
     screen.appendChild(square);
     
 
@@ -78,12 +84,23 @@ function clearScreen(){
 
 
 resizeButton.addEventListener("click",()=>{
-    let size = prompt("How many squares?")
-    //add code to validate its an integer and cap at 100
-    //while (Number.isNaN(size) = false && size >= 100){
-    //    size = prompt("invalid, enter an integer between 1 and 100")
-    //};
-    insertSquares(size)
+    
+    let size = prompt("How many squares?");
+
+    while (Number.isNaN(+size)){
+        size = prompt("Enter a number")
+    }
+
+    size = Math.round(+size);
+
+    if (size > 160){
+        size = 160
+    }
+
+    
+
+    insertSquares(size);
+
 });
 
 
@@ -97,11 +114,21 @@ function readOpacity(square){
 };
 
 
-function darken(square){
+/* function darken(square){
     let opacity = square.style.opacity;
 
     if (opacity < 1){
         square.style.opacity += 1;
+    } 
+} */
+
+
+//only works on one 
+function darken(event){
+    let opacity = this.style.opacity;
+
+    if (opacity < 1){
+        this.style.opacity += 1;
     } 
 }
 
@@ -114,29 +141,18 @@ function progDarken(square){
     } 
 } 
 
-function randColor(){
-    const colors = ["blue","red","green","purple", "yellow", "teal"];
-    let pick = Math.round(Math.random()*5);
-    let output = colors[pick];
-    return output;
-}
-
-/* function randHue(){
+ function randHue(){
     let pick = Math.round(Math.random()*35)*10
     return pick
-} */
+} 
 
 function rgbDarken(square){
     let opacity = square.style.opacity;
-    let color = randColor();
-    //let hue = randHue();
+    let hue = randHue();
     if (opacity < 1){
-        square.style.backgroundColor = color
-        //square.style.backgroundColor = `hsl(${hue},100,50)`
+        square.style.backgroundColor = `hsl(${hue},100%,50%)`
         square.style.opacity += 1;
     } 
-
-    
 }
 
 function resetlisteners(mode){
@@ -156,7 +172,7 @@ function resetlisteners(mode){
             break;
         case 'standard':
             for (const s of squareSet){
-                s.addEventListener("mouseover",()=>{darken(s)})
+                s.addEventListener("mouseover",darken)
             };
             break;
 }}
