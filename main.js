@@ -40,8 +40,11 @@ function insertSquares(dim){
     }
 
 
-    let screenSize = 400 //make this dynamic later
+    //let screenSize = 400 //make this dynamic later
     
+    let screenSize = screen.offsetWidth - 4;
+
+
     let selectedMode 
     for (const r of modeRadio){
         if (r.checked == true){
